@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itens no Estoque</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Itens no Estoque</h1>
+    <table id="estoque-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Fornecedor</th>
+                <th>Quantidade</th>
+                <th>Lote</th>
+                <th>Data Registro</th>
+                <th>Data Registro Entrada</th>
+                <th>Registrado Por</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <script>
+        // Função para carregar os itens do estoque
+        async function carregarItens() {
+            try {
+                const response = await fetch('../php/listar_itens.php');
+                const data = await response.json();
+
+                if (data.success) {
+                    const tableBody = document.querySelector('#estoque-table tbody');
+                    tableBody.innerHTML = '';
+
+                    data.data.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td>${item.id}</td>
+                                <td>${item.nome}</td>
+                                <td>${item.tipo}</td>
+                                <td>${item.fornecedor}</td>
+                                <td>${item.quantidade}</td>
+                                <td>${item.lote}</td>
+                                <td>${item.data_registro}</td>
+                                <td>${item.data_registro_entrada}</td>
+                                <td>${item.registrado_por}</td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += row;
+                    });
+                } else {
+                    alert('Erro ao carregar os itens: ' + data.error);
+                }
+            } catch (error) {
+                alert('Erro ao carregar os itens do estoque: ' + error.message);
+            }
+        }
+
+        // Carregar os itens ao abrir a página
+        window.onload = carregarItens;
+    </script>
+</body>
+</html>
